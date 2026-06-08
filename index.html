@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kristina B — Портфолио | Web Developer</title>
+  <meta name="description" content="Портфолио на Kristina B — уеб разработчик. Проекти, технологии и контакти."/>
+  <meta name="robots" content="index, follow"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #14110d;
+      --bg-soft: #1c1812;
+      --card: #211c15;
+      --border: rgba(230, 178, 105, 0.16);
+      --text: #ece5da;
+      --text-dim: #9b9388;
+      --accent: #e0a958;
+      --accent-soft: rgba(224, 169, 88, 0.12);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: #f3c483; }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(20, 17, 13, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
+    .logo-name { font-weight: 800; letter-spacing: 1px; color: var(--text); font-size: 1.05rem; }
+    .logo-name span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 28px; }
+    nav ul a { color: var(--text-dim); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.5px; transition: color 0.2s; }
+    nav ul a:hover { color: var(--accent); }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 110px 24px 90px;
+      text-align: center;
+      background: radial-gradient(ellipse at top, var(--bg-soft) 0%, var(--bg) 60%);
+    }
+    .hero .eyebrow {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p.tagline {
+      max-width: 600px;
+      margin: 0 auto 34px;
+      color: var(--text-dim);
+      font-size: 1.05rem;
+    }
+    .hero .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 8px;
+      font-weight: 700; font-size: 0.92rem; letter-spacing: 0.4px;
+      transition: transform 0.15s, background 0.2s, border-color 0.2s, color 0.2s;
+      border: 1.5px solid transparent;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--accent); color: #1b150d; }
+    .btn-primary:hover { background: #f3c483; color: #1b150d; }
+    .btn-outline { border-color: var(--border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Section shared ── */
+    section { padding: 80px 0; }
+    .section-head { margin-bottom: 40px; text-align: center; }
+    .section-head .num { color: var(--accent); font-size: 0.78rem; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
+    .section-head h2 { font-size: 1.9rem; font-weight: 800; margin-top: 8px; }
+
+    /* ── About ── */
+    #about p { color: var(--text-dim); max-width: 680px; margin: 0 auto 14px; text-align: center; font-size: 1rem; }
+    #about p:last-child { margin-bottom: 0; }
+
+    .skills-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 30px; }
+    .skill-pill {
+      padding: 8px 16px; border-radius: 999px;
+      background: var(--accent-soft); border: 1px solid var(--border);
+      color: var(--accent); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.3px;
+    }
+
+    /* ── Projects ── */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
+    .project-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px; display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .project-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 12px 30px rgba(0,0,0,0.35); }
+    .project-card h3 { font-size: 1.2rem; font-weight: 800; }
+    .project-card .project-tag {
+      align-self: flex-start;
+      font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); font-weight: 700;
+    }
+    .project-card p { color: var(--text-dim); font-size: 0.92rem; flex-grow: 1; }
+    .project-card .tech-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tech-chip {
+      font-size: 0.72rem; padding: 4px 10px; border-radius: 6px;
+      background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border);
+    }
+    .project-links { display: flex; gap: 16px; margin-top: 4px; }
+    .project-links a { font-size: 0.85rem; font-weight: 700; }
+
+    /* ── Contact ── */
+    #contact { text-align: center; }
+    #contact p { color: var(--text-dim); max-width: 520px; margin: 0 auto 28px; }
+    .contact-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px; text-align: center;
+      color: var(--text-dim); font-size: 0.78rem; letter-spacing: 0.5px;
+    }
+    footer a { color: var(--text-dim); font-weight: 600; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .hero { padding: 90px 20px 70px; }
+      section { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo-name">Kristina<span>B</span></div>
+    <ul>
+      <li><a href="#about">За мен</a></li>
+      <li><a href="#projects">Проекти</a></li>
+      <li><a href="#contact">Контакт</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Web Developer · Дизайн &amp; Разработка</span>
+    <h1>Здравей, аз съм <span>Kristina B</span></h1>
+    <p class="tagline">
+      Изграждам интерактивни уеб сайтове и приложения — от идея до качен в production продукт.
+      Тук ще намериш избрани проекти, върху които съм работила, и начини да се свържеш с мен.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#projects">Виж проектите</a>
+      <a class="btn btn-outline" href="cv.pdf" target="_blank" rel="noopener">Свали CV</a>
+      <a class="btn btn-outline" href="https://github.com/Kristinaxoxox" target="_blank" rel="noopener">GitHub профил</a>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">01 · Запознай се с мен</span>
+      <h2>За мен</h2>
+    </div>
+    <!-- TODO: Замени с твоя реален текст за себе си -->
+    <p>
+      Тук ще добавим кратък разказ за теб — кой си, с какво се занимаваш, какво те мотивира
+      да разработваш продукти, и какъв тип проекти/работа търсиш.
+    </p>
+    <p>
+      Кажи ми какво искаш да пише тук и ще го оформя — 2–3 изречения са напълно достатъчни
+      за силно първо впечатление.
+    </p>
+    <div class="skills-row">
+      <span class="skill-pill">HTML / CSS / JavaScript</span>
+      <span class="skill-pill">Next.js / React</span>
+      <span class="skill-pill">Git &amp; GitHub</span>
+      <span class="skill-pill">UI / UX Дизайн</span>
+      <span class="skill-pill">Responsive Design</span>
+    </div>
+  </div>
+</section>
+
+<section id="projects" style="background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">02 · Избрана работа</span>
+      <h2>Проекти</h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <span class="project-tag">Уеб приложение</span>
+        <h3>Приюти за животни в България</h3>
+        <!-- TODO: Замени с твоя текст за проекта -->
+        <p>
+          Интерактивна карта с приюти за бездомни животни в цялата страна — търсене по град,
+          ден за разходка, справочник с филтри и пагинация, и информация за всеки приют на едно място.
+        </p>
+        <div class="tech-row">
+          <span class="tech-chip">JavaScript</span>
+          <span class="tech-chip">Leaflet.js</span>
+          <span class="tech-chip">HTML / CSS</span>
+        </div>
+        <div class="project-links">
+          <a href="https://kristinaxoxox.github.io/animal-shelters-bulgaria/" target="_blank" rel="noopener">🔗 Виж сайта</a>
+          <a href="https://github.com/Kristinaxoxox/animal-shelters-bulgaria" target="_blank" rel="noopener">💻 Код в GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <span class="project-tag">Корпоративен сайт</span>
+        <h3>Velinov Group</h3>
+        <!-- TODO: Замени с твоя текст за проекта -->
+        <p>
+          Редизайн на сайт за строителна компания — тъмна и златна визуална система,
+          напълно адаптивен дизайн и преработена структура на страниците за по-добро представяне на услугите.
+        </p>
+        <div class="tech-row">
+          <span class="tech-chip">Next.js</span>
+          <span class="tech-chip">CSS</span>
+          <span class="tech-chip">UI Дизайн</span>
+        </div>
+        <div class="project-links">
+          <a href="#" target="_blank" rel="noopener">🔗 Виж сайта</a>
+          <a href="#" target="_blank" rel="noopener">💻 Код в GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card" style="opacity: 0.6;">
+        <span class="project-tag">Очаквай скоро</span>
+        <h3>Следващ проект</h3>
+        <p>
+          Тук ще добавим още един от твоите проекти — само ми дай името, кратко описание,
+          технологиите и линковете.
+        </p>
+        <div class="tech-row">
+          <span class="tech-chip">?</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num">03 · Да се свържем</span>
+      <h2>Контакт</h2>
+    </div>
+    <p>
+      Отворена съм за нови проекти, сътрудничества и предложения за работа.
+      Най-лесно ще ме намериш през GitHub — пиши ми спокойно!
+    </p>
+    <div class="contact-row">
+      <a class="btn btn-primary" href="https://github.com/Kristinaxoxox" target="_blank" rel="noopener">GitHub профил</a>
+      <a class="btn btn-outline" href="cv.pdf" target="_blank" rel="noopener">Свали CV</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Kristina B</span> · <a href="https://github.com/Kristinaxoxox" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+</body>
+</html>

@@ -459,6 +459,29 @@
     .contact-email a:hover { color: var(--accent); border-color: var(--accent); }
     .contact-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
+    .newsletter-form {
+      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+      margin-top: 36px;
+    }
+    .newsletter-input {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      min-width: 260px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .newsletter-input::placeholder { color: var(--text-muted); }
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--border-hover);
+      background: rgba(255,255,255,0.05);
+    }
+    .newsletter-btn { border: none; cursor: pointer; }
+
     /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
@@ -680,6 +703,10 @@
       <a class="btn btn-outline" href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener" data-en="GitHub profile">GitHub профил</a>
       <a class="btn btn-outline" href="cv.pdf" target="_blank" rel="noopener" data-en="Download CV">Свали CV</a>
     </div>
+    <form class="newsletter-form reveal reveal-delay-3" onsubmit="return false;">
+      <input type="email" class="newsletter-input" placeholder="you@example.com" aria-label="Email" required/>
+      <button type="submit" class="btn btn-primary newsletter-btn" data-en="Notify me">Уведоми ме</button>
+    </form>
   </div>
 </section>
 

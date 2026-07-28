@@ -7,7 +7,7 @@
   <meta name="description" content="Портфолио на Кристина Бостанджиева — уеб разработчик. Проекти, технологии и контакти."/>
   <meta name="robots" content="index, follow"/>
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -29,6 +29,7 @@
     }
 
     html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 80px; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -40,6 +41,11 @@
 
     /* Canvas background */
     #bg-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+    #lily-canvas {
       position: fixed; inset: 0;
       width: 100%; height: 100%;
       z-index: 0; pointer-events: none;
@@ -73,32 +79,39 @@
       box-shadow: 0 1px 0 var(--border), 0 8px 32px rgba(0,0,0,0.5);
     }
     nav .wrap {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 20px; padding-bottom: 20px;
+      max-width: 1200px;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding-top: 22px; padding-bottom: 22px;
     }
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600; font-size: 1.3rem; letter-spacing: 2px;
-      color: var(--text);
-    }
-    .logo span { color: var(--accent); }
-    .logo .dot { color: var(--accent); }
 
-    nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+    nav ul {
+      list-style: none; display: flex; gap: 56px; align-items: center;
+      grid-column: 2; justify-self: center;
+    }
     nav ul a {
-      color: var(--text-dim); font-size: 0.85rem; font-weight: 600;
-      letter-spacing: 0.6px; text-transform: uppercase;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      color: var(--text-dim); font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.4px; text-transform: lowercase;
       transition: color 0.2s;
       position: relative;
+      padding: 4px 2px;
     }
-    nav ul a::after {
-      content: '';
-      position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
-      background: var(--accent); transform: scaleX(0); transform-origin: left;
-      transition: transform 0.25s;
+    nav ul a::before { content: '<'; color: var(--accent); opacity: 0.55; margin-right: 2px; }
+    nav ul a::after  { content: ' />'; color: var(--accent); opacity: 0.55; margin-left: 2px; }
+    nav ul a:hover { color: var(--text); }
+    nav ul a:hover::before,
+    nav ul a:hover::after { opacity: 1; }
+
+    .nav-right {
+      grid-column: 3; justify-self: end;
+      display: flex; align-items: center; gap: 14px;
     }
-    nav ul a:hover { color: var(--accent); }
-    nav ul a:hover::after { transform: scaleX(1); }
+    .nav-github {
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .nav-github:hover { color: var(--text); transform: translateY(-1px); }
 
     /* hamburger */
     .hamburger {
@@ -171,9 +184,11 @@
     }
 
     .hero-inner {
-      text-align: center; max-width: 780px; margin: 0 auto;
+      text-align: left; max-width: 900px; margin: 0 auto 0 0;
       position: relative; z-index: 2;
     }
+    .hero-inner .cta-row { justify-content: flex-start; }
+    .hero h1 .name { white-space: nowrap; }
     .hero-inner::before {
       content: '';
       position: absolute;
@@ -188,7 +203,7 @@
       display: inline-flex; align-items: center; gap: 10px;
       font-size: 0.75rem; letter-spacing: 3.5px; text-transform: uppercase;
       color: var(--accent); font-weight: 700; font-family: 'Montserrat', sans-serif;
-      margin-bottom: 24px;
+      margin-top: 24px;
       text-shadow: 0 1px 6px rgba(0,0,0,0.95);
     }
     .hero-eyebrow::before,
@@ -197,21 +212,69 @@
       display: block; width: 28px; height: 1px; background: var(--accent); opacity: 0.5;
     }
 
+    .reveal-char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.12em);
+      filter: blur(6px);
+      animation: revealChar 0.7s cubic-bezier(.4,.1,.2,1) forwards;
+    }
+    @keyframes revealChar {
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    .burn-in {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(6px);
+      animation: burnIn 1.4s cubic-bezier(.3,.1,.2,1) 2.1s forwards;
+    }
+    @keyframes burnIn {
+      0% {
+        opacity: 0;
+        transform: translateY(18px);
+        filter: blur(6px);
+        text-shadow: 0 0 0 rgba(255, 130, 60, 0);
+        color: rgba(255, 160, 90, 0);
+      }
+      40% {
+        opacity: 1;
+        transform: translateY(6px);
+        filter: blur(1.5px);
+        text-shadow: 0 -6px 18px rgba(255, 130, 60, 0.9),
+                     0 0 24px rgba(255, 90, 40, 0.6),
+                     0 -2px 6px rgba(255, 200, 120, 0.8);
+        color: rgba(255, 200, 140, 1);
+      }
+      70% {
+        transform: translateY(1px);
+        filter: blur(0.3px);
+        text-shadow: 0 -3px 10px rgba(255, 130, 60, 0.5),
+                     0 0 14px rgba(255, 90, 40, 0.3);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+        text-shadow: 0 1px 6px rgba(0,0,0,0.95);
+      }
+    }
+
     .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'Bodoni Moda', 'Didot', 'Bodoni 72', serif;
       font-size: clamp(3.2rem, 8vw, 5.6rem);
-      font-weight: 600;
-      letter-spacing: 1px;
+      font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.5px;
+      font-optical-sizing: none;
+      text-align: left;
+      min-height: 2.3em;
       line-height: 1.05;
       margin-bottom: 10px;
       text-shadow: 0 0 40px rgba(0,0,0,0.95), 0 2px 12px rgba(0,0,0,0.9);
     }
-    .hero h1 .name {
-      background: linear-gradient(135deg, #E6E2D6 0%, #C2BCA9 55%, #a09a8c 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .hero h1 .name { color: #F5F1E4; }
+    .hero h1 .name .reveal-char { color: #F5F1E4; }
     .hero h1 .cursor {
       display: inline-block;
       width: 3px; height: 0.85em;
@@ -233,6 +296,20 @@
     }
 
     .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .github-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 50%;
+      color: var(--fg, #E6E2D6);
+      background: transparent;
+      border: 1px solid var(--border, rgba(230,226,214,0.18));
+      transition: color .25s ease, background .25s ease, transform .25s ease, border-color .25s ease;
+    }
+    .github-icon:hover {
+      color: #1A181A;
+      background: #E6E2D6;
+      border-color: #E6E2D6;
+      transform: translateY(-2px);
+    }
 
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -307,7 +384,15 @@
     }
 
     /* ── About ── */
-    #about { background: rgba(26, 24, 26, 0.82); }
+    #about {
+      background: rgba(26, 24, 26, 0.45);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 40px 0;
+    }
+    .hero .wrap, #about .wrap { transform: translateX(-60px); }
     #about .about-layout {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -317,7 +402,7 @@
 
     .profile-photo {
       position: relative;
-      border-radius: 12px;
+      border-radius: 0;
       overflow: hidden;
       aspect-ratio: 3 / 4;
       background: var(--card);
@@ -344,66 +429,100 @@
       color: var(--text-muted); font-weight: 700;
       margin-bottom: 16px;
     }
-    .skills-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+    .skills-row { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 28px; }
     .skill-pill {
-      padding: 7px 14px; border-radius: 8px;
-      background: var(--accent-soft);
-      border: 1px solid var(--border);
-      color: var(--accent); font-size: 0.8rem;
-      font-weight: 600; font-family: 'Montserrat', sans-serif;
-      letter-spacing: 0.2px;
-      transition: background 0.2s, border-color 0.2s;
+      padding: 7px 0; background: none; border: none; border-radius: 0;
+      color: #2fb56a; font-size: 0.8rem;
+      font-weight: 700; font-family: 'Montserrat', sans-serif;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.2s;
     }
-    .skill-pill:hover { background: var(--accent-glow); border-color: var(--border-hover); }
+    .skill-pill:hover { color: #58d488; }
 
     /* ── Projects ── */
     #projects {
       background: linear-gradient(180deg, rgba(26,24,26,0.82) 0%, rgba(31,28,28,0.88) 20%, rgba(31,28,28,0.88) 80%, rgba(26,24,26,0.82) 100%);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      padding: 0;
+      margin-top: 320px;
     }
-    .projects-grid {
+    #projects .wrap { max-width: 100%; padding: 0; }
+
+    .projects-carousel { position: relative; }
+    .projects-viewport { overflow: hidden; }
+    .projects-track {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(.6,.2,.2,1);
+      will-change: transform;
+    }
+    .project-slide {
+      flex: 0 0 100%;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+      align-items: stretch;
+      background: none;
+      border: none;
+      border-radius: 0;
+      overflow: hidden;
+      min-height: 92vh;
     }
+    .project-visual {
+      overflow: hidden;
+      border-left: 1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(196,58,52,0.08), rgba(31,138,76,0.06)),
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.05), transparent 60%),
+        var(--card);
+      position: relative;
+    }
+    .project-visual img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .carousel-controls {
+      /* right edge of the left (text) panel: panel is 1fr of a 1fr + 1.7fr split ≈ 37% */
+      position: absolute; bottom: 22px; right: calc(62.96% + 20px);
+      display: flex; align-items: center; gap: 6px;
+      z-index: 3;
+    }
+    .carousel-arrow {
+      width: 28px; height: 28px; padding: 0;
+      background: none; border: none;
+      color: var(--text-dim); font-size: 1.15rem; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: color .2s, transform .2s;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+    }
+    .carousel-arrow:hover { color: var(--text); transform: translateY(-1px); }
+    .carousel-count {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.78rem; color: var(--text-dim);
+      letter-spacing: 0.5px;
+      min-width: 40px; text-align: center;
+    }
+    .carousel-count .current { color: var(--text); }
+
     .project-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 30px;
-      display: flex; flex-direction: column; gap: 14px;
+      background: none;
+      border: none;
+      border-radius: 0;
+      padding: 56px 52px;
+      display: flex; flex-direction: column; gap: 16px; justify-content: center;
       position: relative; overflow: hidden;
-      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s, background 0.25s;
     }
-    .project-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .project-card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(ellipse at top, rgba(194,188,169,0.04) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .project-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(194,188,169,0.22);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(194,188,169,0.05), var(--glow);
-      background: var(--card-hover);
-    }
-    .project-card:hover::before { opacity: 1; }
-    .project-card:hover::after { opacity: 1; }
 
     .project-tag {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--accent); font-weight: 700;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 1.5rem; font-weight: 700; letter-spacing: 0;
+      color: var(--text); text-transform: none;
+    }
+    .project-kind {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-muted); font-weight: 500;
+      margin-top: -4px;
     }
     .project-card h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -415,8 +534,8 @@
     .tech-row { display: flex; flex-wrap: wrap; gap: 6px; }
     .tech-chip {
       font-size: 0.7rem; padding: 4px 10px; border-radius: 6px;
-      background: rgba(255,255,255,0.03);
-      color: var(--text-dim); border: 1px solid var(--border);
+      background: none; border: none;
+      color: #2fb56a;
       font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.2px;
     }
     .project-links { display: flex; gap: 18px; margin-top: 2px; }
@@ -429,7 +548,23 @@
     .project-links a svg { width: 13px; height: 13px; flex-shrink: 0; }
 
     /* ── Contact ── */
-    #contact { text-align: center; background: rgba(26, 24, 26, 0.82); }
+    #contact {
+      text-align: left; background: transparent;
+      padding: 460px 0 260px;
+      border-top: none;
+      border-bottom: none;
+    }
+    .contact-card {
+      width: 100%;
+      padding: 56px 0;
+      background: rgba(26, 24, 26, 0.35);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0;
+    }
+    #contact .wrap { transform: translateX(-60px); }
     .contact-glow {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%,-50%);
@@ -442,45 +577,89 @@
     #contact .section-head h2 { text-align: center; }
     #contact p {
       color: var(--text-dim); max-width: 500px;
-      margin: 0 auto 36px; line-height: 1.75;
+      margin: 0 0 36px; line-height: 1.75;
       text-shadow: 0 1px 8px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.7);
     }
+    .contact-title {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: 0;
+    }
     .contact-email {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.88rem; letter-spacing: 0.5px;
-      margin-bottom: 32px !important;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.95rem; letter-spacing: 0.2px; font-weight: 400;
+      margin-bottom: 10px !important;
     }
     .contact-email a {
       color: var(--text-dim);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
+      border: none;
+      transition: color 0.2s;
     }
-    .contact-email a:hover { color: var(--accent); border-color: var(--accent); }
+    .contact-email a:hover { color: #2fb56a; }
+    .contact-links {
+      display: flex; gap: 60px;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 0.88rem; letter-spacing: 1.2px; font-weight: 500;
+    }
+    .contact-links a {
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+    .contact-links a:hover { color: #2fb56a; }
     .contact-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .contact-icons {
+      display: flex; gap: 20px; justify-content: flex-start; margin-top: 20px;
+    }
+    .contact-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      color: var(--text-dim);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .contact-icon:hover { color: #2fb56a; transform: translateY(-2px); }
 
-    .newsletter-form {
-      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
-      margin-top: 36px;
+    .contact-form {
+      display: flex; flex-direction: column; gap: 20px;
+      max-width: 520px; margin: 40px 0 0;
+      text-align: left;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
     }
-    .newsletter-input {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      padding: 13px 18px;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: rgba(255,255,255,0.03);
+    .cf-field { display: flex; flex-direction: column; gap: 6px; }
+    .cf-label { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.4px; }
+    .cf-tag { color: #2fb56a; }
+    .cf-input {
+      font-family: inherit;
+      font-size: 0.95rem;
       color: var(--text);
-      min-width: 260px;
+      background: rgba(255,255,255,0.02);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 2px;
       transition: border-color 0.2s, background 0.2s;
+      resize: none;
     }
-    .newsletter-input::placeholder { color: var(--text-muted); }
-    .newsletter-input:focus {
+    .cf-input::placeholder { color: var(--text-muted); opacity: 0.6; }
+    .cf-input:focus {
       outline: none;
-      border-color: var(--border-hover);
-      background: rgba(255,255,255,0.05);
+      border-bottom-color: #2fb56a;
+      background: rgba(47,181,106,0.04);
     }
-    .newsletter-btn { border: none; cursor: pointer; }
+    .cf-textarea { line-height: 1.6; min-height: 96px; }
+    .cf-submit {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      background: none; border: none; cursor: pointer;
+      padding: 10px 0;
+      margin-top: 4px;
+      transition: color 0.2s;
+    }
+    .cf-submit-brackets { color: #2fb56a; font-weight: 700; }
+    .cf-submit:hover { color: #2fb56a; }
 
     /* ── Footer ── */
     footer {
@@ -497,7 +676,7 @@
 
     /* ── Lang toggle ── */
     .lang-btn {
-      background: none; border: 1px solid var(--border);
+      background: none; border: none;
       color: var(--text-muted); font-family: 'Montserrat', sans-serif;
       font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
       padding: 5px 11px; border-radius: 6px; cursor: pointer;
@@ -532,20 +711,27 @@
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
+<canvas id="lily-canvas"></canvas>
 
 <!-- Nav -->
 <nav id="navbar">
   <div class="wrap">
-    <a href="#" class="logo">Kristina<span>B</span><span class="dot">.</span></a>
     <ul>
-      <li><a href="#about" data-en="About">За мен</a></li>
-      <li><a href="#projects" data-en="Projects">Проекти</a></li>
-      <li><a href="#contact" data-en="Contact">Контакт</a></li>
+      <li><a href="#about" data-en="about">about</a></li>
+      <li><a href="#projects" data-en="projects">projects</a></li>
+      <li><a href="#contact" data-en="contact">contact</a></li>
     </ul>
-    <button class="lang-btn" id="lang-btn">EN</button>
-    <button class="hamburger" id="hamburger" aria-label="Меню">
-      <span></span><span></span><span></span>
-    </button>
+    <div class="nav-right">
+      <a class="nav-github" href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.03 11.03 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.26 5.69.41.35.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+        </svg>
+      </a>
+      <button class="lang-btn" id="lang-btn">EN</button>
+      <button class="hamburger" id="hamburger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -562,54 +748,32 @@
   <div class="hero-blob hero-blob-2"></div>
   <div class="wrap">
     <div class="hero-inner">
-      <div class="hero-eyebrow reveal">Web Developer &amp; Designer</div>
       <h1 class="reveal reveal-delay-1">
         <span data-en="Hello, I'm">Здравей, аз съм</span><br>
         <span class="name" data-en="Kristina Bostandzhieva">Кристина Бостанджиева</span><span class="cursor"></span>
       </h1>
-      <p class="tagline reveal reveal-delay-2" data-en="I build interactive websites and applications — from idea to finished product with clean code and attention to detail.">
-        Изграждам интерактивни уеб сайтове и приложения —
-        от идея до готов продукт с чист код и внимание към детайла.
-      </p>
-      <div class="cta-row reveal reveal-delay-3">
-        <a class="btn btn-primary" href="#projects" data-en="View projects">Виж проектите</a>
-        <a class="btn btn-outline" href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener">GitHub</a>
-      </div>
+      <div class="hero-eyebrow burn-in">Web Developer &amp; Designer</div>
     </div>
-  </div>
-  <div class="scroll-hint">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Scroll
   </div>
 </header>
 
 <!-- About -->
 <section id="about">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="section-label" data-en="01 · About me">01 · За мен</div>
-      <h2 data-en="Who I am">Кой съм аз</h2>
-      <div class="section-divider"></div>
-    </div>
     <div class="about-layout">
       <div class="profile-photo reveal">
         <img src="images/kristina.png" alt="Кристина Бостанджиева"/>
       </div>
       <div class="about-content">
         <div class="about-text reveal reveal-delay-1">
-          <p data-en="Hi, I'm a junior programmer with freelance experience and software development education from SoftUni.">
-            Здравейте, аз съм junior програмист с фрийланс опит и образование по софтуерна разработка от SoftUni.
+          <p data-en="I'm a junior programmer with freelance experience and a software development education from SoftUni.">
+            Junior програмист с фрийланс опит и образование от SoftUni.
           </p>
-          <p data-en="Over the past few years, I have worked on projects independently, building practical skills in programming, problem-solving, communication, and project delivery. Freelancing has taught me how to take responsibility, understand client needs, and find working solutions.">
-            През последните няколко години работя самостоятелно по различни проекти, които ми помогнаха да развия практически
-            умения в програмирането, решаването на проблеми, комуникацията с клиенти и успешното изпълнение на поставени задачи.
-            Фрийланс опитът ме научи да поемам отговорност, да разбирам нуждите на хората, с които работя, и да търся ефективни решения.
+          <p data-en="I've worked independently on projects with real clients — building practical coding, problem-solving, and communication skills along the way.">
+            Работя самостоятелно по различни проекти с реални клиенти — така изградих практически умения в кода, решаването на проблеми и комуникацията.
           </p>
-          <p data-en="I'm currently looking for a full-time programming role where I can continue growing, learn from experienced developers, and contribute to meaningful projects.">
-            В момента търся възможност за full-time позиция като програмист, в която да продължа да се развивам,
-            да уча от по-опитни разработчици и да допринасям за реални и смислени проекти.
+          <p data-en="Now I'm looking for a full-time role where I can keep growing alongside an experienced team.">
+            Търся full-time позиция, в която да продължа да се развивам заедно с опитен екип.
           </p>
         </div>
         <div class="skills-block reveal reveal-delay-2">
@@ -632,51 +796,67 @@
 <!-- Projects -->
 <section id="projects">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div class="section-label" data-en="02 · Selected work">02 · Избрана работа</div>
-      <h2 data-en="Projects">Проекти</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="projects-grid">
+    <div class="projects-carousel reveal">
+      <div class="projects-viewport">
+        <div class="projects-track" id="projectsTrack">
 
-      <div class="project-card reveal">
-        <span class="project-tag" data-en="Web application">Уеб приложение</span>
-        <h3 data-en="Animal Shelters in Bulgaria">Приюти за животни в България</h3>
-        <p data-en="Interactive map of stray animal shelters across the country — search by city, walk day, a directory with filters and pagination, and all shelter info in one place.">
-          Интерактивна карта с приюти за бездомни животни в цялата страна — търсене по град,
-          ден за разходка, справочник с филтри и пагинация, и информация за всеки приют на едно място.
-        </p>
-        <div class="tech-row">
-          <span class="tech-chip">JavaScript</span>
-          <span class="tech-chip">Leaflet.js</span>
-          <span class="tech-chip">HTML / CSS</span>
-        </div>
-        <div class="project-links">
-          <a href="https://kristinaxoxox.github.io/animal-shelters-bulgaria/" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-            <span data-en="View site">Виж сайта</span>
-          </a>
-          <a href="https://github.com/Kristinaxoxox/animal-shelters-bulgaria" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
-            GitHub
-          </a>
+          <div class="project-slide">
+            <div class="project-card">
+              <span class="project-tag">[projects]</span>
+              <h3 data-en="Animal Shelters in Bulgaria">Приюти за животни в България</h3>
+              <span class="project-kind" data-en="Web application">Уеб приложение</span>
+              <p data-en="Interactive map of stray animal shelters across the country — search by city, walk day, a directory with filters and pagination, and all shelter info in one place.">
+                Интерактивна карта с приюти за бездомни животни в цялата страна — търсене по град,
+                ден за разходка, справочник с филтри и пагинация, и информация за всеки приют на едно място.
+              </p>
+              <div class="tech-row">
+                <span class="tech-chip">JavaScript</span>
+                <span class="tech-chip">Leaflet.js</span>
+                <span class="tech-chip">HTML / CSS</span>
+              </div>
+              <div class="project-links">
+                <a href="https://kristinaxoxox.github.io/animal-shelters-bulgaria/" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                  <span data-en="View site">Виж сайта</span>
+                </a>
+                <a href="https://github.com/Kristinaxoxox/animal-shelters-bulgaria" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+                  GitHub
+                </a>
+              </div>
+            </div>
+            <div class="project-visual">
+              <img src="images/project-shelters.png" alt="Приюти за животни в България" onerror="this.remove()">
+            </div>
+          </div>
+
+          <div class="project-slide">
+            <div class="project-card">
+              <span class="project-tag">[projects]</span>
+              <h3>Velinov Group</h3>
+              <span class="project-kind" data-en="Corporate site">Корпоративен сайт</span>
+              <p data-en="Redesign of a construction company website — dark and gold visual system, fully responsive design and restructured page layout for better service presentation.">
+                Редизайн на сайт за строителна компания — тъмна и златна визуална система,
+                напълно адаптивен дизайн и преработена структура на страниците за по-добро представяне на услугите.
+              </p>
+              <div class="tech-row">
+                <span class="tech-chip">Next.js</span>
+                <span class="tech-chip">CSS</span>
+                <span class="tech-chip">UI Дизайн</span>
+              </div>
+            </div>
+            <div class="project-visual">
+              <img src="images/project-velinov.png" alt="Velinov Group" onerror="this.remove()">
+            </div>
+          </div>
+
         </div>
       </div>
-
-      <div class="project-card reveal reveal-delay-1">
-        <span class="project-tag" data-en="Corporate site">Корпоративен сайт</span>
-        <h3>Velinov Group</h3>
-        <p data-en="Redesign of a construction company website — dark and gold visual system, fully responsive design and restructured page layout for better service presentation.">
-          Редизайн на сайт за строителна компания — тъмна и златна визуална система,
-          напълно адаптивен дизайн и преработена структура на страниците за по-добро представяне на услугите.
-        </p>
-        <div class="tech-row">
-          <span class="tech-chip">Next.js</span>
-          <span class="tech-chip">CSS</span>
-          <span class="tech-chip">UI Дизайн</span>
-        </div>
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="prevProject" aria-label="Previous">‹</button>
+        <span class="carousel-count"><span class="current" id="projectCurrent">1</span> / <span id="projectTotal">1</span></span>
+        <button class="carousel-arrow" id="nextProject" aria-label="Next">›</button>
       </div>
-
     </div>
   </div>
 </section>
@@ -684,36 +864,19 @@
 <!-- Contact -->
 <section id="contact">
   <div class="contact-glow"></div>
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="section-label" data-en="03 · Let's connect">03 · Да се свържем</div>
-      <h2 data-en="Contact">Контакт</h2>
-      <div class="section-divider" style="margin: 16px auto 0;"></div>
+  <div class="contact-card reveal">
+    <div class="wrap">
+      <h2 class="contact-title">[Contact]</h2>
+      <p class="contact-email">
+        <a href="mailto:kristinabostandzhieva@proton.me">kristinabostandzhieva@proton.me</a>
+      </p>
+      <div class="contact-links">
+        <a href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener">GITHUB</a>
+      </div>
     </div>
-    <p class="reveal reveal-delay-1" data-en="I'm open to new projects, collaborations and job offers. Feel free to reach out by email or find me on GitHub!">
-      Отворена съм за нови проекти, сътрудничества и предложения за работа.
-      Пиши ми на имейл или ме намери в GitHub!
-    </p>
-    <p class="contact-email reveal reveal-delay-1">
-      <a href="mailto:kristinabostandzhieva@proton.me">kristinabostandzhieva@proton.me</a>
-    </p>
-    <div class="contact-row reveal reveal-delay-2">
-      <a class="btn btn-primary" href="mailto:kristinabostandzhieva@proton.me" data-en="Send email">Изпрати имейл</a>
-      <a class="btn btn-outline" href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener" data-en="GitHub profile">GitHub профил</a>
-    </div>
-    <form class="newsletter-form reveal reveal-delay-3" style="display:none;" onsubmit="return false;">
-      <input type="email" class="newsletter-input" placeholder="you@example.com" aria-label="Email" required/>
-      <button type="submit" class="btn btn-primary newsletter-btn" data-en="Notify me">Уведоми ме</button>
-    </form>
   </div>
 </section>
 
-<footer>
-  <span data-en="© 2026 Kristina Bostandzhieva">© 2026 Кристина Бостанджиева</span>
-  <div class="footer-links">
-    <a href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener">GitHub</a>
-  </div>
-</footer>
 
 <script>
   /* ── Background: stars + constellations + matrix rain ── */
@@ -836,15 +999,44 @@
     window.addEventListener('resize', resize, { passive: true });
   })();
 
+  // Elegant one-shot reveal for the hero heading — each letter fades in place, no shifting
+  function typeHero() {
+    const h1 = document.querySelector('.hero h1');
+    if (!h1) return;
+    const spans = h1.querySelectorAll('span[data-en]');
+    if (spans.length < 2) return;
+
+    // Hide the typewriter caret — the reveal is soft, not terminal-y
+    const caret = h1.querySelector('.cursor');
+    if (caret) caret.style.display = 'none';
+
+    let idx = 0;
+    spans.forEach(el => {
+      const text = el.textContent;
+      el.textContent = '';
+      for (const ch of text) {
+        const s = document.createElement('span');
+        s.className = 'reveal-char';
+        s.textContent = ch;
+        if (ch === ' ') s.style.whiteSpace = 'pre';
+        s.style.animationDelay = (0.15 + idx * 0.035) + 's';
+        el.appendChild(s);
+        idx++;
+      }
+    });
+  }
+
   // Language switcher
   (function () {
     let lang = 'bg';
     const btn = document.getElementById('lang-btn');
 
-    // Cache original BG content on first load
+    // Cache original BG content on first load (before we split the hero into word spans)
     document.querySelectorAll('[data-en]').forEach(el => {
       el.dataset.bg = el.innerHTML;
     });
+
+    typeHero();
 
     btn.addEventListener('click', () => {
       lang = lang === 'bg' ? 'en' : 'bg';
@@ -863,6 +1055,8 @@
           el.innerHTML = el.dataset.bg;
         }
       });
+
+      typeHero();
     });
   })();
 
@@ -898,6 +1092,343 @@
   document.querySelectorAll('.hero .reveal').forEach((el, i) => {
     setTimeout(() => el.classList.add('visible'), i * 120 + 100);
   });
+
+  // Projects carousel
+  (function () {
+    const track = document.getElementById('projectsTrack');
+    if (!track) return;
+    const slides = track.children;
+    const current = document.getElementById('projectCurrent');
+    const total = document.getElementById('projectTotal');
+    total.textContent = slides.length;
+    let idx = 0;
+
+    function go(n) {
+      idx = (n + slides.length) % slides.length;
+      track.style.transform = 'translateX(' + (-idx * 100) + '%)';
+      current.textContent = idx + 1;
+    }
+    document.getElementById('prevProject').addEventListener('click', () => go(idx - 1));
+    document.getElementById('nextProject').addEventListener('click', () => go(idx + 1));
+  })();
+</script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+  /* ── 3D wireframe spider lily (higanbana), centered, rotating toward the cursor, glowing like sunlit red ── */
+  import * as THREE from 'three';
+  import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+  import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+  import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+  const canvas = document.getElementById('lily-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 0, 11);
+
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 1.15, 0.75, 0.08);
+  composer.addPass(bloom);
+
+  /* deep shadow-red at the base rising to sunlit coral at the tips, gold anthers like the real bloom */
+  const COL_BASE = new THREE.Color(0x6e1310);
+  const COL_TIP  = new THREE.Color(0xf24a3c);
+  const COL_HOT  = new THREE.Color(0x1f8a4c);
+
+  function makeGradientLine(points, opacity, hotTip) {
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    const colors = [];
+    const n = points.length;
+    for (let i = 0; i < n; i++) {
+      const t = i / (n - 1);
+      const c = t < 0.75
+        ? COL_BASE.clone().lerp(COL_TIP, t / 0.75)
+        : COL_TIP.clone().lerp(hotTip ? COL_HOT : COL_TIP, (t - 0.75) / 0.25);
+      colors.push(c.r, c.g, c.b);
+    }
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    const mat = new THREE.LineBasicMaterial({
+      vertexColors: true, transparent: true, opacity,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    return new THREE.Line(geo, mat);
+  }
+
+  /* a petal is a wide curling ribbon: two edge-curves that taper together at base and tip.
+     A smooth outward bow, a strong backward recurve past the midpoint (the real higanbana's
+     signature fold-back), a rounded point, and a rippled, crimped margin like sun-lit crepe. */
+  function makePetal(len, spread, seed) {
+    const group = new THREE.Group();
+    const nudge = (b) => Math.sin(seed * 3.1 + b * 2.4) * 0.02;
+
+    function edge(side) {
+      const pts = [
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(spread * (0.42 + nudge(1)) + side * 0.05, len * 0.26, spread * 0.14),
+        new THREE.Vector3(spread * (0.98 + nudge(2)) + side * 0.09, len * 0.56, spread * 0.02),
+        new THREE.Vector3(spread * (0.92 + nudge(3)) + side * 0.05, len * 0.80, -spread * 0.34), /* strong recurve */
+        new THREE.Vector3(spread * (0.56 + nudge(4)) + side * 0.02, len * 0.95, -spread * 0.58), /* folds well past vertical */
+        new THREE.Vector3(spread * (0.34 + nudge(5)) + side * 0.01, len * 0.86, -spread * 0.62),
+      ];
+      const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.4);
+      const raw = curve.getPoints(48);
+      /* crimped, rippled margin — grows more pronounced toward the curled tip */
+      return raw.map((p, idx) => {
+        const t = idx / (raw.length - 1);
+        const ruffle = Math.sin(t * Math.PI * 6.5 + seed * 2 + side * 1.7) * spread * 0.05 * t;
+        return new THREE.Vector3(p.x, p.y, p.z + ruffle);
+      });
+    }
+
+    const left = edge(-1), right = edge(1);
+    group.add(makeGradientLine(left, 0.68, false));
+    group.add(makeGradientLine(right, 0.68, false));
+
+    /* fine, evenly-spaced cross-veins knitting the two edges together */
+    const VN = left.length;
+    for (let v = 3; v < VN - 3; v += 4) {
+      const t = v / VN;
+      const veinGeo = new THREE.BufferGeometry().setFromPoints([left[v], right[v]]);
+      const veinMat = new THREE.LineBasicMaterial({
+        color: COL_TIP.clone().lerp(COL_BASE, 1 - t), transparent: true,
+        opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false,
+      });
+      group.add(new THREE.Line(veinGeo, veinMat));
+    }
+    return group;
+  }
+
+  /* long, thread-thin stamen that sweeps outward and slightly downward in one graceful,
+     continuous arc — like the real higanbana filaments — with only a gentle curl at the
+     very tip, ending in a small glowing gold anther */
+  function makeStamen(len, spread, curl) {
+    const pts = [
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(spread * 0.18, len * 0.34, spread * 0.04),
+      new THREE.Vector3(spread * 0.55, len * 0.72, -spread * 0.02),
+      new THREE.Vector3(spread * 0.92, len * 1.02, -spread * 0.10),
+      new THREE.Vector3(spread * 1.10, len * 1.22, -spread * 0.20),
+      /* only a light curl at the very tip, not a hook */
+      new THREE.Vector3(spread * (1.14 + curl * 0.12), len * (1.30 + curl * 0.04), -spread * (0.24 + curl * 0.10)),
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.45);
+    const curvePts = curve.getPoints(40);
+    const group = new THREE.Group();
+    group.add(makeGradientLine(curvePts, 0.55, false));
+
+    const tip = curve.getPoint(1);
+    const antherGeo = new THREE.SphereGeometry(0.09, 8, 8);
+    const antherMat = new THREE.MeshBasicMaterial({
+      color: COL_HOT, transparent: true, opacity: 0.35,
+      blending: THREE.AdditiveBlending, depthWrite: false,
+    });
+    const anther = new THREE.Mesh(antherGeo, antherMat);
+    anther.position.copy(tip);
+    group.add(anther);
+    return group;
+  }
+
+  /* one floret: 6 petals + 6 long stamens radiating from a single center, exactly like
+     one bloom of the real umbel — this whole group's local +Y axis points "outward",
+     away from the umbel's center, so it can be aimed like a spoke */
+  function buildFloret(petalLen, spread, opacity, seedBase) {
+    const floret = new THREE.Group();
+    const N = 6;
+    for (let i = 0; i < N; i++) {
+      const angle = (i / N) * Math.PI * 2;
+      const spreadMul = 0.88 + 0.14 * Math.sin(i * 2.1 + seedBase);
+
+      const petal = makePetal(petalLen, spread * spreadMul, i + seedBase * 7);
+      petal.rotation.z = angle;
+      floret.add(petal);
+
+      const curl = 0.4 + 0.6 * Math.sin(i * 1.7 + seedBase + 1);
+      const stamen = makeStamen(petalLen * 0.85, spread * 0.55 * spreadMul, curl);
+      stamen.rotation.z = angle + 0.14;
+      floret.add(stamen);
+    }
+    const coreGeo = new THREE.IcosahedronGeometry(0.14, 1);
+    const coreMat = new THREE.LineBasicMaterial({ color: COL_HOT, transparent: true, opacity: 0.3, blending: THREE.AdditiveBlending, depthWrite: false });
+    floret.add(new THREE.LineSegments(new THREE.WireframeGeometry(coreGeo), coreMat));
+    floret.traverse(o => { if (o.material) o.material.opacity *= opacity; });
+    return floret;
+  }
+
+  /* Big compound spider-lily composition: one large crown bloom at top, a curling stem
+     descending well beyond the viewport, side buds and secondary blooms branching off,
+     and trailing wireframe leaves — sized so scrolling gradually reveals the whole plant */
+  const flower = new THREE.Group();
+
+  /* the crown bloom — larger and denser than a single floret */
+  const crown = new THREE.Group();
+  {
+    const N = 8;
+    for (let i = 0; i < N; i++) {
+      const angle = (i / N) * Math.PI * 2;
+      const spreadMul = 0.85 + 0.16 * Math.sin(i * 1.7);
+      const petal = makePetal(4.2, 1.25 * spreadMul, i);
+      petal.rotation.z = angle;
+      crown.add(petal);
+      const curl = 0.4 + 0.6 * Math.sin(i * 1.9);
+      const stamen = makeStamen(3.6, 0.7 * spreadMul, curl);
+      stamen.rotation.z = angle + 0.11;
+      crown.add(stamen);
+    }
+    /* an inner second whorl for depth */
+    const N2 = 6;
+    for (let i = 0; i < N2; i++) {
+      const angle = (i / N2) * Math.PI * 2 + Math.PI / N2;
+      const petal = makePetal(2.9, 0.9, i + 20);
+      petal.rotation.z = angle;
+      petal.position.z = -0.2;
+      petal.scale.setScalar(0.85);
+      crown.add(petal);
+    }
+    const coreGeo = new THREE.IcosahedronGeometry(0.2, 1);
+    const coreMat = new THREE.LineBasicMaterial({ color: COL_HOT, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false });
+    crown.add(new THREE.LineSegments(new THREE.WireframeGeometry(coreGeo), coreMat));
+  }
+  crown.position.set(0, 4, 0);
+  flower.add(crown);
+
+  /* the long curling stem — a single graceful S-curve descending well below the viewport */
+  const stemPts = [
+    new THREE.Vector3(0, 4, 0),
+    new THREE.Vector3(-0.4, 1.8, 0.4),
+    new THREE.Vector3(0.3, -0.8, -0.2),
+    new THREE.Vector3(-0.2, -3.6, 0.5),
+    new THREE.Vector3(0.5, -6.4, -0.1),
+    new THREE.Vector3(-0.3, -9.2, 0.3),
+    new THREE.Vector3(0.2, -12, -0.4),
+    new THREE.Vector3(-0.4, -15, 0.2),
+  ];
+  const stemCurve = new THREE.CatmullRomCurve3(stemPts, false, 'catmullrom', 0.4);
+  {
+    const pts = stemCurve.getPoints(120);
+    const geo = new THREE.BufferGeometry().setFromPoints(pts);
+    const colors = [];
+    for (let i = 0; i < pts.length; i++) {
+      const t = i / (pts.length - 1);
+      const c = COL_HOT.clone().lerp(COL_BASE, t);
+      colors.push(c.r * 0.6, c.g * 0.6, c.b * 0.6);
+    }
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    const mat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+    flower.add(new THREE.Line(geo, mat));
+  }
+
+  /* side buds + secondary smaller blooms attached along the stem — at descending points */
+  function sideFloret(petalLen, spread, seedBase) {
+    const f = new THREE.Group();
+    const N = 6;
+    for (let i = 0; i < N; i++) {
+      const angle = (i / N) * Math.PI * 2;
+      const petal = makePetal(petalLen, spread, i + seedBase * 5);
+      petal.rotation.z = angle;
+      f.add(petal);
+      const stamen = makeStamen(petalLen * 0.75, spread * 0.5, 0.5 + 0.5 * Math.sin(i * 1.5 + seedBase));
+      stamen.rotation.z = angle + 0.12;
+      f.add(stamen);
+    }
+    return f;
+  }
+  const secondaryPositions = [
+    { t: 0.20, side:  1, size: 2.4, spread: 0.85, tiltZ: -0.5 },
+    { t: 0.38, side: -1, size: 1.9, spread: 0.72, tiltZ:  0.6 },
+    { t: 0.55, side:  1, size: 2.6, spread: 0.9,  tiltZ: -0.4 },
+    { t: 0.72, side: -1, size: 1.7, spread: 0.66, tiltZ:  0.55 },
+    { t: 0.88, side:  1, size: 2.2, spread: 0.8,  tiltZ: -0.5 },
+  ];
+  secondaryPositions.forEach((s, i) => {
+    const anchor = stemCurve.getPoint(s.t);
+    const bloom = sideFloret(s.size, s.spread, i + 30);
+    bloom.position.copy(anchor);
+    bloom.position.x += s.side * (2.4 + Math.random() * 0.4);
+    bloom.position.z += (Math.random() - 0.5) * 0.6;
+    bloom.rotation.z = s.tiltZ;
+    bloom.rotation.y = (Math.random() - 0.5) * 0.6;
+    flower.add(bloom);
+
+    /* thin branch line from stem out to the bloom's origin */
+    const branchGeo = new THREE.BufferGeometry().setFromPoints([anchor, bloom.position.clone()]);
+    const branchMat = new THREE.LineBasicMaterial({ color: COL_BASE, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false });
+    flower.add(new THREE.Line(branchGeo, branchMat));
+  });
+
+  /* long, sword-shaped wireframe leaves near the base */
+  function makeLeaf(len, side, seed) {
+    const pts = [
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(side * 0.4, -len * 0.25, 0.2),
+      new THREE.Vector3(side * 1.1, -len * 0.55, 0.05),
+      new THREE.Vector3(side * 1.4, -len * 0.85, -0.15),
+      new THREE.Vector3(side * 1.2, -len * 1.05, -0.3),
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.4);
+    const raw = curve.getPoints(30);
+    const pts2 = raw.map((p, i) => {
+      const t = i / (raw.length - 1);
+      const nudge = Math.sin(t * Math.PI * 3 + seed) * 0.08 * (1 - t);
+      return new THREE.Vector3(p.x, p.y + nudge, p.z);
+    });
+    return makeGradientLine(pts2, 0.45, false);
+  }
+  for (let i = 0; i < 5; i++) {
+    const leaf = makeLeaf(4 + Math.random() * 2, i % 2 === 0 ? 1 : -1, i * 3.7);
+    leaf.position.set((Math.random() - 0.5) * 1.6, -14.5 + Math.random() * 0.8, (Math.random() - 0.5) * 0.6);
+    flower.add(leaf);
+  }
+
+  flower.position.set(3.2, 0, 0);
+  scene.add(flower);
+
+  /* pointer tracking — normalized -1..1 */
+  const pointer = { x: 0, y: 0 };
+  const eased = { x: 0, y: 0 };
+  window.addEventListener('pointermove', (e) => {
+    pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  function resize() {
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    composer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  let autoRot = 0;
+  function animate(ts) {
+    requestAnimationFrame(animate);
+
+    eased.x += (pointer.x - eased.x) * 0.035;
+    eased.y += (pointer.y - eased.y) * 0.035;
+
+    autoRot += 0.0003;
+    const breathe = 1 + Math.sin(ts * 0.0011) * 0.03;
+
+    flower.rotation.y = autoRot + eased.x * 0.4;
+    flower.rotation.x = -eased.y * 0.18;
+    flower.rotation.z = eased.x * 0.06;
+    flower.scale.setScalar(breathe * 0.9);
+
+    composer.render();
+  }
+  requestAnimationFrame(animate);
 </script>
 
 </body>

@@ -1220,13 +1220,7 @@
       ctx.fillRect(0, 0, W, H);
 
       /* matrix rain columns — left side only, show only in about section */
-      if (window.showMatrixRain && window.aboutSectionBounds) {
-        ctx.save();
-        const bounds = window.aboutSectionBounds;
-        ctx.beginPath();
-        ctx.rect(0, bounds.top, W, bounds.height);
-        ctx.clip();
-
+      if (window.showMatrixRain) {
         ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
         const midX = W / 3;
         for (const col of cols) {
@@ -1234,12 +1228,12 @@
           const y = col.y;
           if (y > -FONT_SIZE && y < H + FONT_SIZE) {
             /* head: bright white-green */
-            ctx.globalAlpha = 0.65;
-            ctx.fillStyle = '#ccffcc';
+            ctx.globalAlpha = 0.9;
+            ctx.fillStyle = '#00ff41';
             ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], col.x, y);
             /* one char behind head: classic matrix green */
             if (y > FONT_SIZE * 2) {
-              ctx.globalAlpha = 0.35;
+              ctx.globalAlpha = 0.6;
               ctx.fillStyle = '#00ff41';
               ctx.fillText(CHARS[Math.floor(Math.random() * CHARS.length)], col.x, y - FONT_SIZE);
             }
@@ -1251,7 +1245,6 @@
             col.on = Math.random() > 0.38;
           }
         }
-        ctx.restore();
       }
 
       ctx.globalAlpha = 1;

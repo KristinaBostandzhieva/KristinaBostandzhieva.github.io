@@ -1220,7 +1220,13 @@
       ctx.fillRect(0, 0, W, H);
 
       /* matrix rain columns — left side only, show only in about section */
-      if (window.showMatrixRain) {
+      if (window.showMatrixRain && window.aboutSectionBounds) {
+        ctx.save();
+        const bounds = window.aboutSectionBounds;
+        ctx.beginPath();
+        ctx.rect(0, bounds.top, W, bounds.height);
+        ctx.clip();
+
         ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
         const midX = W / 3;
         for (const col of cols) {
@@ -1245,6 +1251,7 @@
             col.on = Math.random() > 0.38;
           }
         }
+        ctx.restore();
       }
 
       ctx.globalAlpha = 1;
@@ -1387,15 +1394,42 @@
 
   // Show matrix rain only when about section is in view
   window.showMatrixRain = false;
+  window.aboutSectionBounds = null;
   (function () {
     const aboutSection = document.getElementById('about');
     if (!aboutSection || !('IntersectionObserver' in window)) return;
     const rainObserver = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         window.showMatrixRain = e.isIntersecting;
+        if (e.isIntersecting) {
+          const rect = aboutSection.getBoundingClientRect();
+          window.aboutSectionBounds = {
+            top: rect.top + window.scrollY,
+            bottom: rect.bottom + window.scrollY,
+            left: rect.left,
+            right: rect.right,
+            height: rect.height
+          };
+        } else {
+          window.aboutSectionBounds = null;
+        }
       });
     }, { threshold: 0.1 });
     rainObserver.observe(aboutSection);
+
+    // Update bounds on scroll
+    window.addEventListener('scroll', () => {
+      if (window.showMatrixRain && aboutSection) {
+        const rect = aboutSection.getBoundingClientRect();
+        window.aboutSectionBounds = {
+          top: rect.top + window.scrollY,
+          bottom: rect.bottom + window.scrollY,
+          left: rect.left,
+          right: rect.right,
+          height: rect.height
+        };
+      }
+    }, { passive: true });
   })();
 
   // Projects carousel

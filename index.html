@@ -1205,16 +1205,6 @@
       ctx.fillStyle = 'rgba(83, 83, 95, 0.075)';
       ctx.fillRect(0, 0, W, H);
 
-      /* stars with twinkle */
-      for (const s of stars) {
-        const tw = Math.sin(ts * s.spd * 1000 + s.phase) * 0.32 + 0.68;
-        ctx.globalAlpha = s.base * tw;
-        ctx.fillStyle = '#E6E2D6';
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
       /* matrix rain columns */
       ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
       for (const col of cols) {

@@ -74,6 +74,11 @@
       width: 100%; height: 100%;
       z-index: 0; pointer-events: none;
       mix-blend-mode: screen;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    #lily-canvas.visible {
+      opacity: 1;
     }
 
     a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
@@ -1383,6 +1388,18 @@
     setTimeout(() => el.classList.add('visible'), i * 120 + 100);
   });
 
+  // Show lily canvas only when about section is in view
+  (function () {
+    const lilyCanvas = document.getElementById('lily-canvas');
+    const aboutSection = document.getElementById('about');
+    if (!lilyCanvas || !aboutSection || !('IntersectionObserver' in window)) return;
+    const lilyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        lilyCanvas.classList.toggle('visible', e.isIntersecting);
+      });
+    }, { threshold: 0.1 });
+    lilyObserver.observe(aboutSection);
+  })();
 
   // Projects carousel
   (function () {

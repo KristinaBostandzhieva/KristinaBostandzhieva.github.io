@@ -96,7 +96,13 @@
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       padding: 0;
+      background: rgba(26, 24, 26, 0.85);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
       transition: background 0.3s, box-shadow 0.3s;
+      /* diffused edge effect */
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
     }
     nav.scrolled {
       background: rgba(26, 24, 26, 0.94);

@@ -31,8 +31,8 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #1A181A;
-      --bg-soft: #1f1c1c;
+      --bg: #53535F;
+      --bg-soft: #5c5c68;
       --card: #2C1917;
       --card-hover: #341e1c;
       --border: rgba(230, 226, 214, 0.09);
@@ -73,6 +73,7 @@
       position: fixed; inset: 0;
       width: 100%; height: 100%;
       z-index: 0; pointer-events: none;
+      mix-blend-mode: screen;
     }
 
     a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
@@ -226,7 +227,7 @@
       content: '';
       position: absolute;
       inset: -60px -80px;
-      background: radial-gradient(ellipse at center, rgba(14,12,9,0.82) 30%, transparent 75%);
+      background: radial-gradient(ellipse at center, rgba(30,30,38,0.55) 30%, transparent 75%);
       z-index: -1;
       pointer-events: none;
       border-radius: 50%;
@@ -516,6 +517,11 @@
     }
     .project-visual img {
       width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .project-embed {
+      position: absolute; top: 0; left: 0;
+      width: 1440px; border: 0; display: block;
+      transform-origin: top left;
     }
 
     .carousel-controls {
@@ -1003,6 +1009,37 @@
             <div class="project-card">
               <span class="project-tag" data-en="[projects]">[проекти]</span>
               <div class="project-title-row">
+                <h3>Soap Factory</h3>
+                <button class="project-expand" type="button" aria-expanded="false" aria-label="Toggle details">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+              </div>
+              <span class="project-kind" data-en="Online store">Онлайн магазин</span>
+              <p data-en="E-commerce site for a handmade soap brand — product catalog, clean product pages, and a warm visual identity built around natural, artisan cosmetics.">
+                Онлайн магазин за марка ръчно изработени сапуни — продуктов каталог,
+                изчистени продуктови страници и топла визуална идентичност, изградена около натурална, занаятчийска козметика.
+              </p>
+              <div class="tech-row">
+                <span class="tech-chip" data-en="E-commerce">Е-търговия</span>
+                <span class="tech-chip">HTML / CSS</span>
+                <span class="tech-chip" data-en="UI Design">UI Дизайн</span>
+              </div>
+              <div class="project-links">
+                <a href="https://soapfactory.bg" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                  <span data-en="View site">Виж сайта</span>
+                </a>
+              </div>
+            </div>
+            <div class="project-visual">
+              <iframe class="project-embed" data-embed-width="1440" src="https://soapfactory.bg" title="Soap Factory" referrerpolicy="no-referrer" scrolling="no"></iframe>
+            </div>
+          </div>
+
+          <div class="project-slide">
+            <div class="project-card">
+              <span class="project-tag" data-en="[projects]">[проекти]</span>
+              <div class="project-title-row">
                 <h3 data-en="Animal Shelters in Bulgaria">Приюти за животни в България</h3>
                 <button class="project-expand" type="button" aria-expanded="false" aria-label="Toggle details">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
@@ -1019,7 +1056,7 @@
                 <span class="tech-chip">HTML / CSS</span>
               </div>
               <div class="project-links">
-                <a href="https://kristinaxoxox.github.io/animal-shelters-bulgaria/" target="_blank" rel="noopener">
+                <a href="https://map.mecho-ngo.bg/" target="_blank" rel="noopener">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
                   <span data-en="View site">Виж сайта</span>
                 </a>
@@ -1030,7 +1067,7 @@
               </div>
             </div>
             <div class="project-visual">
-              <img src="images/project-shelters.png" alt="Приюти за животни в България" onerror="this.remove()">
+              <iframe class="project-embed" data-embed-width="1440" src="https://map.mecho-ngo.bg/" title="Приюти за животни в България" referrerpolicy="no-referrer" scrolling="no"></iframe>
             </div>
           </div>
 
@@ -1053,9 +1090,15 @@
                 <span class="tech-chip">CSS</span>
                 <span class="tech-chip" data-en="UI Design">UI Дизайн</span>
               </div>
+              <div class="project-links">
+                <a href="https://luxury-cobbler-351089.netlify.app/nachalo.html" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+                  <span data-en="View site">Виж сайта</span>
+                </a>
+              </div>
             </div>
             <div class="project-visual">
-              <img src="images/project-velinov.png" alt="Velinov Group" onerror="this.remove()">
+              <iframe class="project-embed" data-embed-width="1440" src="https://luxury-cobbler-351089.netlify.app/nachalo.html" title="Velinov Group" referrerpolicy="no-referrer" scrolling="no"></iframe>
             </div>
           </div>
 
@@ -1114,7 +1157,7 @@
       buildStars();
       buildCols();
       /* paint solid bg once so old canvas state is gone */
-      ctx.fillStyle = '#1A181A';
+      ctx.fillStyle = '#53535F';
       ctx.fillRect(0, 0, W, H);
     }
 
@@ -1159,19 +1202,8 @@
       last = ts - (dt % INTERVAL);
 
       /* fade trail — semi-transparent overlay */
-      ctx.fillStyle = 'rgba(26, 24, 26, 0.075)';
+      ctx.fillStyle = 'rgba(83, 83, 95, 0.075)';
       ctx.fillRect(0, 0, W, H);
-
-      /* constellation lines (static, redraw each frame) */
-      ctx.lineWidth = 0.5;
-      for (const e of edges) {
-        ctx.globalAlpha = e.a;
-        ctx.strokeStyle = '#C2BCA9';
-        ctx.beginPath();
-        ctx.moveTo(stars[e.i].x, stars[e.i].y);
-        ctx.lineTo(stars[e.j].x, stars[e.j].y);
-        ctx.stroke();
-      }
 
       /* stars with twinkle */
       for (const s of stars) {
@@ -1399,6 +1431,20 @@
       handle.addEventListener('pointerup', stop);
       handle.addEventListener('pointercancel', stop);
     }
+
+    // Scale embedded site iframes so they always show their full desktop layout
+    document.querySelectorAll('.project-embed').forEach((frame) => {
+      const panel = frame.parentElement;
+      const base = parseFloat(frame.dataset.embedWidth) || 1440;
+      const fit = () => {
+        const scale = panel.clientWidth / base;
+        frame.style.transform = 'scale(' + scale + ')';
+        frame.style.height = (panel.clientHeight / scale) + 'px';
+      };
+      fit();
+      if (window.ResizeObserver) new ResizeObserver(fit).observe(panel);
+      window.addEventListener('resize', fit);
+    });
 
     // Mobile-only collapse/expand — toggling any arrow expands/collapses ALL slides at once
     const allSlides = document.querySelectorAll('.project-slide');

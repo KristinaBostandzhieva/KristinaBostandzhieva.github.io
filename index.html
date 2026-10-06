@@ -31,8 +31,8 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #3a3a42;
-      --bg-soft: #42424c;
+      --bg: #1f1f27;
+      --bg-soft: #28282f;
       --card: #2C1917;
       --card-hover: #341e1c;
       --border: rgba(230, 226, 214, 0.09);
@@ -99,10 +99,14 @@
       background: rgba(26, 24, 26, 0.85);
       backdrop-filter: blur(12px);
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      transition: background 0.3s, box-shadow 0.3s;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.4s ease;
+      transform: translateY(0);
       /* diffused edge effect */
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+    }
+    nav.hide-on-scroll {
+      transform: translateY(-100%);
     }
     nav.scrolled {
       background: rgba(26, 24, 26, 0.94);
@@ -446,8 +450,8 @@
       overflow: hidden;
       background: var(--card);
       border: 1px solid var(--border);
-      align-self: stretch;
-      min-height: 100%;
+      width: 260px;
+      height: 360px;
     }
     .profile-photo img {
       width: 100%; height: 100%;
@@ -493,7 +497,7 @@
 
     .projects-carousel {
       position: relative;
-      --project-split: 37%;
+      --project-split: 22%;
     }
     .projects-viewport { overflow: hidden; }
     .projects-track {
@@ -948,6 +952,11 @@
           <path d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.03 11.03 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.26 5.69.41.35.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
         </svg>
       </a>
+      <a class="nav-github" href="https://www.linkedin.com/in/kristina-bostandzhieva-82a56942b/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.731-2.004 1.439-.103.249-.129.597-.129.946v5.42h-3.554s.05-8.789 0-9.704h3.554v1.374c.43-.664 1.198-1.609 2.913-1.609 2.122 0 3.71 1.388 3.71 4.37v5.569zM5.337 8.855c-1.144 0-1.915-.762-1.915-1.715 0-.955.77-1.715 1.914-1.715 1.144 0 1.915.76 1.915 1.715 0 .953-.771 1.715-1.914 1.715zm1.6 11.597H3.738V9.348h3.199v11.104zM22.224 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.224 0z"/>
+        </svg>
+      </a>
       <button class="lang-btn" id="lang-btn">EN</button>
       <button class="hamburger" id="hamburger" aria-label="Меню">
         <span></span><span></span><span></span>
@@ -988,14 +997,14 @@
       </div>
       <div class="about-content">
         <div class="about-text reveal reveal-delay-1">
-          <p data-en="I'm a junior programmer with freelance experience and a software development education from SoftUni.">
-            Junior програмист с фрийланс опит и образование от SoftUni.
+          <p data-en="I build web projects from idea to finished product, with design being my strongest area — clean, responsive and easy-to-use interfaces.">
+            Създавам уеб проекти от идеята до готовия продукт, като най-силната ми страна е дизайнът — чисти, responsive и лесни за използване интерфейси.
           </p>
-          <p data-en="I've worked independently on projects with real clients — building practical coding, problem-solving, and communication skills along the way.">
-            Работя самостоятелно по различни проекти с реални клиенти — така изградих практически умения в кода, решаването на проблеми и комуникацията.
+          <p data-en="I have hands-on experience with e-commerce, web applications, API integrations and production deployment. I mainly work with React, Next.js, TypeScript and JavaScript.">
+            Имам практически опит с e-commerce, уеб приложения, API интеграции и production deployment. Основно работя с React, Next.js, TypeScript и JavaScript.
           </p>
-          <p data-en="Now I'm looking for a full-time role where I can keep growing alongside an experienced team.">
-            Търся full-time позиция, в която да продължа да се развивам заедно с опитен екип.
+          <p data-en="Contact: kristinabostandzhieva@proton.me">
+            За контакт: kristinabostandzhieva@proton.me
           </p>
         </div>
         <div class="skills-block reveal reveal-delay-2">
@@ -1003,10 +1012,13 @@
           <div class="skills-row">
             <span class="skill-pill">HTML / CSS</span>
             <span class="skill-pill">JavaScript</span>
+            <span class="skill-pill">TypeScript</span>
             <span class="skill-pill">React</span>
             <span class="skill-pill">Next.js</span>
+            <span class="skill-pill">Tailwind CSS</span>
+            <span class="skill-pill">Node.js</span>
             <span class="skill-pill">Git &amp; GitHub</span>
-            <span class="skill-pill">UI / UX</span>
+            <span class="skill-pill">REST APIs</span>
             <span class="skill-pill">Responsive Design</span>
           </div>
         </div>
@@ -1032,10 +1044,9 @@
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
               </div>
-              <span class="project-kind" data-en="Online store">Онлайн магазин</span>
-              <p data-en="E-commerce site for a handmade soap brand — product catalog, clean product pages, and a warm visual identity built around natural, artisan cosmetics.">
-                Онлайн магазин за марка ръчно изработени сапуни — продуктов каталог,
-                изчистени продуктови страници и топла визуална идентичност, изградена около натурална, занаятчийска козметика.
+              <span class="project-kind" data-en="Full-stack e-commerce platform">Full-stack e-commerce платформа</span>
+              <p data-en="Independently built and launched a production e-commerce platform featuring a product catalogue, cart and checkout, online payments, and integrations with Econt, Speedy and BOX NOW. Built with Next.js, React and TypeScript and deployed on a self-hosted Linux server.">
+                Самостоятелно разработен и пуснат в production онлайн магазин с продуктов каталог, количка и checkout, онлайн плащания и интеграции с Econt, Speedy и BOX NOW. Изграден с Next.js, React и TypeScript и deployment на собствен Linux сървър.
               </p>
               <div class="tech-row">
                 <span class="tech-chip" data-en="E-commerce">Е-търговия</span>
@@ -1063,10 +1074,9 @@
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
               </div>
-              <span class="project-kind" data-en="Web application">Уеб приложение</span>
-              <p data-en="Interactive map of stray animal shelters across the country — search by city, walk day, a directory with filters and pagination, and all shelter info in one place.">
-                Интерактивна карта с приюти за бездомни животни в цялата страна — търсене по град,
-                ден за разходка, справочник с филтри и пагинация, и информация за всеки приют на едно място.
+              <span class="project-kind" data-en="Interactive web application">Интерактивно уеб приложение</span>
+              <p data-en="Interactive map for discovering animal shelters across Bulgaria, with search, filtering and detailed information for each shelter. Built with vanilla JavaScript, Leaflet.js and OpenStreetMap, with a focus on performance, easy navigation and SEO.">
+                Интерактивна карта на приюти за животни в България с търсене, филтриране и подробна информация за всеки приют. Разработена с vanilla JavaScript, Leaflet.js и OpenStreetMap, с фокус върху бързина, лесна навигация и SEO.
               </p>
               <div class="tech-row">
                 <span class="tech-chip">JavaScript</span>
@@ -1098,10 +1108,9 @@
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
               </div>
-              <span class="project-kind" data-en="Corporate site">Корпоративен сайт</span>
-              <p data-en="Redesign of a construction company website — dark and gold visual system, fully responsive design and restructured page layout for better service presentation.">
-                Редизайн на сайт за строителна компания — тъмна и златна визуална система,
-                напълно адаптивен дизайн и преработена структура на страниците за по-добро представяне на услугите.
+              <span class="project-kind" data-en="Corporate website">Корпоративен уебсайт</span>
+              <p data-en="Complete redesign and development of a responsive 11-page corporate website for a construction company. Created a new content structure, project gallery and interactive animations within a consistent dark-and-gold visual system.">
+                Цялостен редизайн и разработка на responsive корпоративен сайт за строителна компания. Изградих 11 страници, нова структура на съдържанието, проектна галерия и анимации, обединени в последователна тъмна и златна визуална система.
               </p>
               <div class="tech-row">
                 <span class="tech-chip">Next.js</span>
@@ -1150,6 +1159,7 @@
       </p>
       <div class="contact-links">
         <a href="https://github.com/KristinaBostandzhieva" target="_blank" rel="noopener">GITHUB</a>
+        <a href="https://www.linkedin.com/in/kristina-bostandzhieva-82a56942b/" target="_blank" rel="noopener">LINKEDIN</a>
       </div>
     </div>
   </div>
@@ -1334,10 +1344,22 @@
     });
   })();
 
-  // Sticky nav
+  // Sticky nav with scroll hide
   const navbar = document.getElementById('navbar');
+  let lastScrollY = 0;
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 40);
+
+    // Hide navbar when scrolling down, show when scrolling up
+    const currentScrollY = window.scrollY;
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      // Scrolling down
+      navbar.classList.add('hide-on-scroll');
+    } else {
+      // Scrolling up
+      navbar.classList.remove('hide-on-scroll');
+    }
+    lastScrollY = currentScrollY;
   }, { passive: true });
 
   // Hide nav (and anything else at top) while the projects section is in view — youtube-fullscreen feel

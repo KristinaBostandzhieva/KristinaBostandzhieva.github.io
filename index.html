@@ -1171,7 +1171,7 @@
       buildStars();
       buildCols();
       /* paint solid bg once so old canvas state is gone */
-      ctx.fillStyle = '#53535F';
+      ctx.fillStyle = '#3a3a42';
       ctx.fillRect(0, 0, W, H);
     }
 
@@ -1216,7 +1216,7 @@
       last = ts - (dt % INTERVAL);
 
       /* fade trail — semi-transparent overlay */
-      ctx.fillStyle = 'rgba(83, 83, 95, 0.075)';
+      ctx.fillStyle = 'rgba(58, 58, 66, 0.075)';
       ctx.fillRect(0, 0, W, H);
 
       /* matrix rain columns — left side only */

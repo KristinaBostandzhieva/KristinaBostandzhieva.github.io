@@ -61,6 +61,11 @@
       color: var(--text);
       line-height: 1.65;
       overflow-x: hidden;
+      width: 100%;
+    }
+    html {
+      width: 100%;
+      overflow-x: hidden;
     }
 
     /* Canvas background */
@@ -215,12 +220,14 @@
       background: radial-gradient(circle, rgba(44,25,23,0.55) 0%, transparent 70%);
       top: 5%; left: -5%;
       animation-delay: 0s;
+      max-width: 100vw;
     }
     .hero-blob-2 {
       width: 380px; height: 380px;
       background: radial-gradient(circle, rgba(44,25,23,0.4) 0%, transparent 70%);
       bottom: 5%; right: -5%;
       animation-delay: -4s;
+      max-width: 100vw;
     }
     @keyframes blobFloat {
       0%, 100% { transform: translateY(0px) scale(1); }
@@ -823,6 +830,11 @@
       /* Undo the desktop -60px shift that would push content off-screen */
       .hero .wrap, #about .wrap, #contact .wrap { transform: none; }
 
+      /* Hero blobs — reduce or hide on mobile */
+      .hero-blob-1 { width: 300px; height: 300px; left: -10%; top: 10%; }
+      .hero-blob-2 { width: 200px; height: 200px; right: -10%; bottom: 10%; }
+      .hero::after { width: 400px; height: 300px; top: -80px; }
+
       /* Hero */
       .hero { padding: 90px 22px 200px; min-height: 0; display: block; text-align: center; }
       .hero-inner { max-width: 100%; text-align: center; margin: 0 auto; }
@@ -865,6 +877,8 @@
         aspect-ratio: 4 / 5;
         min-height: 0;
         border: none;
+        justify-self: center;
+        margin: 0 auto;
       }
       .hero { padding-bottom: 0; }
       #about .about-layout { gap: 12px; }
@@ -886,25 +900,39 @@
       .skills-title { margin-bottom: 8px; }
 
       /* Projects: stack text over image, kill the resize handle and fullscreen scroll-snap */
-      #projects { margin-top: 120px; scroll-snap-align: none; }
+      #projects { margin-top: 60px; scroll-snap-align: none; }
       .project-slide {
         grid-template-columns: 1fr;
         min-height: auto;
       }
       .project-card { padding: 32px 22px; gap: 12px; justify-content: flex-start; align-items: center; text-align: center; }
       .project-expand { display: inline-flex; }
-      .project-title-row { justify-content: center; }
+      /* Leave room on both sides for the carousel arrows that flank the heading */
+      .project-title-row { justify-content: center; padding: 0 44px; }
       .tech-row { justify-content: center; }
       .project-links { justify-content: center; }
       .project-tag { font-size: 1.2rem; }
       .project-card h3 { font-size: 1.3rem; }
       .project-visual {
-        aspect-ratio: 16 / 10;
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 3 / 4;
+        height: auto;
         border-left: none;
         border-top: 1px solid var(--border);
       }
+      /* No hover on touch — keep the live preview fully visible instead of dimmed */
+      .project-visual::before { background: rgba(0,0,0,0.12); }
       .split-handle { display: none; }
-      .carousel-controls { right: 22px; }
+      /* Arrows flank the project heading: one on each edge, aligned to the title row */
+      .carousel-controls {
+        top: 60px; bottom: auto; left: 0; right: 0;
+        width: 100%; padding: 0 10px;
+        justify-content: space-between;
+        pointer-events: none;
+      }
+      .carousel-controls .carousel-arrow { pointer-events: auto; width: 40px; height: 40px; font-size: 1.6rem; color: var(--text); }
+      .carousel-count { display: none; }
       .fs-toggle { display: none; }
 
       /* Collapsible on mobile — image panel always visible; text collapses behind the toggle */
@@ -913,7 +941,7 @@
       .project-slide:not(.is-open) .project-card > .project-links { display: none; }
 
       /* Contact */
-      #contact { padding: 200px 0; margin-top: 440px; }
+      #contact { padding: 100px 0; margin-top: 120px; }
       .contact-card { padding: 44px 0; }
       .contact-title { font-size: 1.3rem; }
       .contact-email { font-size: 0.95rem !important; word-break: break-all; }
@@ -929,7 +957,7 @@
       .nav-github svg { width: 16px; height: 16px; }
       .lang-btn { padding: 4px 8px; font-size: 0.7rem; }
       #about { padding: 0 0 40px; }
-      #contact { padding: 140px 0; }
+      #contact { padding: 72px 0; }
       .project-card { padding: 24px 18px; }
     }
   </style>
@@ -1233,16 +1261,24 @@
       ctx.fillStyle = 'rgba(58, 58, 66, 0.075)';
       ctx.fillRect(0, 0, W, H);
 
-      /* matrix rain columns — left side only, show only in about section */
-      if (window.showMatrixRain && window.aboutSectionRect && window.aboutSectionRect.height > 0) {
+      /* matrix rain columns — full screen on mobile, left side of the about section on desktop */
+      const rainMobile = W <= 900;
+      const rainOn = rainMobile
+        ? true
+        : (window.showMatrixRain && window.aboutSectionRect && window.aboutSectionRect.height > 0);
+      if (rainOn) {
         ctx.save();
-        const rect = window.aboutSectionRect;
         ctx.beginPath();
-        ctx.rect(0, rect.top, W, rect.height);
+        if (rainMobile) {
+          ctx.rect(0, 0, W, H);
+        } else {
+          const rect = window.aboutSectionRect;
+          ctx.rect(0, rect.top, W, rect.height);
+        }
         ctx.clip();
 
         ctx.font = `${FONT_SIZE}px 'Courier New', monospace`;
-        const midX = W / 3;
+        const midX = rainMobile ? W : W / 3;
         for (const col of cols) {
           if (!col.on || col.x > midX) continue;
           const y = col.y;
@@ -1507,9 +1543,19 @@
       const panel = frame.parentElement;
       const base = parseFloat(frame.dataset.embedWidth) || 1440;
       const fit = () => {
-        const scale = panel.clientWidth / base;
-        frame.style.transform = 'scale(' + scale + ')';
-        frame.style.height = (panel.clientHeight / scale) + 'px';
+        const mobile = window.matchMedia('(max-width: 900px)').matches;
+        if (mobile) {
+          // On phones, show each site's own responsive (mobile) layout at 1:1,
+          // filling the preview panel — reads like viewing the live site on a phone.
+          frame.style.width = panel.clientWidth + 'px';
+          frame.style.transform = 'scale(1)';
+          frame.style.height = panel.clientHeight + 'px';
+        } else {
+          const scale = panel.clientWidth / base;
+          frame.style.width = base + 'px';
+          frame.style.transform = 'scale(' + scale + ')';
+          frame.style.height = (panel.clientHeight / scale) + 'px';
+        }
       };
       fit();
       if (window.ResizeObserver) new ResizeObserver(fit).observe(panel);
